@@ -1,19 +1,34 @@
 package com.jtarcio.makiHub.resources;
 
+import com.jtarcio.makiHub.entities.User;
+import com.jtarcio.makiHub.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jtarcio.makiHub.entities.User;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/users")
 public class UserResource {
 
-	@GetMapping
-	public ResponseEntity<User> findAll(){
-		User u = new User(1L, "Guilherme", "guilherme@email.com", "889999-9999", "admin123");
-		return ResponseEntity.ok().body(u);
-	}
+    @Autowired
+    private UserService userService;
+
+    @GetMapping
+    public ResponseEntity<List<User>> findAll() {
+
+        List<User> list = userService.findAll();
+        return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> findById(@PathVariable Long id) {
+        User user = userService.findById(id);
+        return ResponseEntity.ok().body(user);
+    }
 }
